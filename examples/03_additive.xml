@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<synthesizer xmlns:xi="http://www.w3.org/2001/XInclude">
+    <modules>
+
+        <module type="operator">
+            <output name="out"/>
+
+            <module type="midiSource" name="midi"/>
+
+            <module type="constant" name="transpose">
+                <parameter name="value" def="0.0" min="-5.0" max="+5.0" step="1/12"/>
+            </module>
+
+            <module type="adder" name="fadd" lockParameters="1"/>
+
+            <module type="vco" name="oscillator">
+                <parameter name="amplitude" def="-6.0"/>
+                <parameter name="waveform"  def="sine"/>
+            </module>
+
+            <module type="adsr" name="envelope">
+                <parameter name="attackLevel"  def="0.0"   locked="1"/>
+                <parameter name="releaseLevel" def="-60.0" locked="1"/>
+            </module>
+
+            <module type="vga" name="vga"/>
+
+            <patch from="midi.cv"         to="fadd.in0"/>
+            <patch from="transpose.out"   to="fadd.in1"/>
+            <patch from="fadd.out"        to="oscillator.cv"/>
+            <patch from="midi.gate"       to="envelope.gate"/>
+            <patch from="oscillator.out"  to="vga.in"/>
+            <patch from="envelope.out"    to="vga.gain"/>
+            <patch from="vga.out"         to="out"/>
+        </module>
+
+        <module type="03_additive">
+            <output name="out"/>
+
+            <module type="operator" name="signal0">
+                <parameter name="oscillator.waveform" def="half_sine"/>
+                <parameter name="envelope.releaseTime" def="1.0"/>
+            </module>
+
+            <module type="operator" name="signal1">
+                <parameter name="oscillator.waveform" def="derived_square"/>
+                <parameter name="envelope.releaseTime" def="0.8"/>
+            </module>
+
+            <module type="mixer" name="mixer" numInputs="2"/>
+
+            <patch from="signal0.out" to="mixer.in0"/>
+            <patch from="signal1.out" to="mixer.in1"/>
+            <patch from="mixer.out" to="out"/>
+        </module>
+    </modules>
+    <instruments>
+        <instrument name="03_additive" module="03_additive">
+            <attribute name="midiChannel" value="1" />
+            <attribute name="maxVoices" value="16" />
+            <attribute name="minLevel" value="-60.0" />
+        </instrument>
+    </instruments>
+</synthesizer>
