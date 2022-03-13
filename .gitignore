@@ -6,3 +6,5 @@ Makefile
 *.swp
 *.o
 *.a
+
+__pycache__
