@@ -259,6 +259,15 @@ int SynthApp::run (int argc, const char* argv[]) {
         return 1;
     }
 
+    // Setup logging
+    const auto logLevelName = args(argc, argv, "--log-level", "warn");
+    auto logLevel = spdlog::level::from_str(logLevelName);
+    if (logLevel == spdlog::level::off) {
+        logger->critical("Unknown log level '{}'", logLevelName);
+        return -1;
+    }
+    spdlog::set_level(logLevel);
+
     // ........................................................................
 
 #ifdef SYNTH_USE_PORTAUDIO
