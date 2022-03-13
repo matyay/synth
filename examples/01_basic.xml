@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<synthesizer>
+    <modules>
+        <module type="01_basic">
+            <output name="out"/>
+
+            <module type="midiSource" name="midi"/>
+            <module type="vco" name="oscillator"/>
+            <module type="multiplier" name="mult" numPorts="2"/>
+
+            <patch from="midi.cv" to="oscillator.cv"/>
+            <patch from="midi.gate" to="mult.in0"/>
+            <patch from="oscillator.out" to="mult.in1"/>
+            <patch from="mult.out" to="out"/>
+        </module>
+    </modules>
+    <instruments>
+        <instrument name="01_basic" module="01_basic">
+            <attribute name="midiChannel" value="1" />
+            <attribute name="maxVoices" value="16" />
+            <attribute name="minLevel" value="-60.0" />
+        </instrument>
+    </instruments>
+</synthesizer>
