@@ -5,6 +5,8 @@
 #include <strutils.hh>
 #include <stringf.hh>
 
+#include <cctype> 
+
 namespace Graph {
 
 // ============================================================================
@@ -36,6 +38,9 @@ void DotWriter::writeDot (const std::string& a_FileName) {
 
 const std::string DotWriter::fixupName (const std::string& a_Name) {
     std::string fixed (a_Name);
+    if (isdigit(a_Name[0])) {
+        fixed = "_" + fixed;
+    }
     fixed = strutils::replace(fixed, "#", "_");
     fixed = strutils::replace(fixed, ".", "_");
     return fixed;
